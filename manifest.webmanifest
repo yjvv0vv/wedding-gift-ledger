@@ -1,0 +1,14 @@
+{
+  "name": "우리 결혼식 축의금 장부",
+  "short_name": "축의금 장부",
+  "description": "신랑 측과 신부 측 축의금을 기록하고 합계를 관리하는 개인용 웹앱",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f8f5f0",
+  "theme_color": "#f8f5f0",
+  "icons": [
+    {"src": "./icons/icon-192.png", "sizes": "192x192", "type": "image/png"},
+    {"src": "./icons/icon-512.png", "sizes": "512x512", "type": "image/png"}
+  ]
+}

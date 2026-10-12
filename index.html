@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f8f5f0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="축의금 장부">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./icons/icon-192.png">
+<title>우리 결혼식 축의금 장부</title>
+<style>
+:root{color-scheme:light;--bg:#f8f5f0;--paper:#fff;--ink:#292621;--muted:#817a70;--line:#e8e1d8;--accent:#39352f;--rose:#f8e9e8;--peach:#fbefe3;--danger:#a63e38}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+main{width:min(100%,620px);margin:auto;padding:18px 15px 40px}.hero,.panel{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:20px;margin-bottom:14px;box-shadow:0 2px 12px #33271908}
+.eyebrow{font-size:11px;letter-spacing:.18em;color:var(--muted)}h1{font-size:25px;margin:7px 0 5px;letter-spacing:-.04em}h2{font-size:18px;margin:0;letter-spacing:-.03em}.sub{font-size:13px;color:var(--muted);margin:0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}.tile{border-radius:16px;padding:14px}.tile.groom{background:var(--rose)}.tile.bride{background:var(--peach)}.small{font-size:12px;color:var(--muted)}.big{font-weight:800;font-size:20px;margin-top:7px;letter-spacing:-.03em}.total{background:#302d28;color:white;border-radius:16px;padding:16px;margin-top:11px}.total .small{color:#d7d1c9}.total .big{font-size:27px}.total .sub{color:#d7d1c9;margin-top:6px}
+form{margin-top:16px}.field{margin:13px 0}.field label{display:block;font-size:13px;font-weight:700;margin-bottom:7px}input,select,textarea{width:100%;border:1px solid #ddd5ca;border-radius:12px;padding:13px;font:inherit;font-size:15px;background:#fff;color:var(--ink);min-height:46px}input:focus,select:focus,textarea:focus{outline:2px solid #b8a99a;outline-offset:1px}.radios{display:grid;grid-template-columns:1fr 1fr;gap:8px}.radios label{border:1px solid var(--line);border-radius:12px;padding:12px;font-weight:500;display:flex;align-items:center;gap:8px}.radios input{width:auto;min-height:auto;accent-color:#39352f}.amounts{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:8px}button{font:inherit;cursor:pointer;border-radius:12px;padding:12px;border:1px solid var(--line);background:white;color:var(--ink);font-weight:650}button:active{transform:scale(.99)}.amounts button{font-size:12px;padding:10px 3px}.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:17px}.primary{background:var(--accent);color:white;border-color:var(--accent)}.hidden{display:none!important}.tools{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:13px}.tools button{font-size:13px}.danger{color:var(--danger);border-color:#efd4d2}.search{margin:14px 0 8px}.filters{display:grid;grid-template-columns:1fr 1fr;gap:8px}.records{display:grid;gap:9px;margin-top:14px}.record{border:1px solid var(--line);border-radius:15px;padding:13px}.recordtop{display:flex;justify-content:space-between;gap:12px}.tags{display:flex;gap:5px;flex-wrap:wrap}.tag{font-size:11px;border-radius:99px;background:#f2efeb;padding:5px 8px}.tag.g{background:var(--rose)}.tag.b{background:var(--peach)}.recordname{font-weight:750;margin:9px 0 4px;overflow-wrap:anywhere}.recordmeta,.note{font-size:12px;color:var(--muted);line-height:1.5;overflow-wrap:anywhere}.recordamount{font-weight:800;white-space:nowrap}.recordbuttons{display:flex;justify-content:flex-end;gap:14px;margin-top:9px}.recordbuttons button{border:0;padding:2px 0;text-decoration:underline;font-size:12px}.recordbuttons .delete{color:var(--danger)}.empty{padding:25px 5px;text-align:center;color:var(--muted);font-size:13px}.status{font-size:12px;color:var(--muted);line-height:1.6;margin:12px 0 0}.foot{text-align:center;color:var(--muted);font-size:11px;padding:5px 0 20px}
+@media(min-width:560px){main{padding-top:28px}.hero,.panel{padding:24px}}
+</style>
+</head>
+<body>
+<main>
+<header class="hero">
+<div class="eyebrow">OUR WEDDING</div><h1>축의금 장부</h1><p class="sub">신랑 측 · 신부 측 간편 관리</p>
+<div class="grid">
+<div class="tile groom"><div class="small">신랑 측 합계</div><div id="groom-total" class="big">0원</div><div id="groom-count" class="small">0건</div></div>
+<div class="tile bride"><div class="small">신부 측 합계</div><div id="bride-total" class="big">0원</div><div id="bride-count" class="small">0건</div></div>
+</div>
+<div class="total"><div class="small">전체 축의금</div><div id="all-total" class="big">0원</div><p id="payment-total" class="sub">계좌이체 0원 · 현금 0원</p></div>
+</header>
+<section class="panel">
+<h2 id="form-title">축의금 입력</h2>
+<form id="gift-form">
+<div class="field"><label for="side">누구 측 축의금인가요?</label><select id="side" required><option>신랑 측</option><option>신부 측</option></select></div>
+<div class="field"><label>받은 방식</label><div class="radios"><label><input type="radio" name="method" value="계좌이체" checked> 계좌이체</label><label><input type="radio" name="method" value="현금"> 현금</label></div></div>
+<div class="field"><label for="date">받은 날짜</label><input id="date" type="date" required></div>
+<div class="field"><label for="name">축의금 낸 사람</label><input id="name" required placeholder="예: 김민수" autocomplete="off"></div>
+<div class="field"><label for="relation">관계 (선택)</label><input id="relation" placeholder="예: 친구, 직장 동료, 친척"></div>
+<div class="field"><label for="amount">축의금 금액 (원)</label><input id="amount" type="number" min="1" step="1000" required placeholder="예: 100000"><div class="amounts"><button type="button" data-amount="50000">5만원</button><button type="button" data-amount="100000">10만원</button><button type="button" data-amount="200000">20만원</button><button type="button" data-amount="300000">30만원</button></div></div>
+<div class="field"><label for="note">메모 (선택)</label><input id="note" placeholder="추가로 기록할 내용"></div>
+<div class="actions"><button id="save-btn" class="primary" type="submit">내역 저장</button><button id="cancel-edit" class="hidden" type="button">수정 취소</button></div>
+</form>
+</section>
+<section class="panel">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><h2>입력 내역</h2><span id="record-count" class="small">총 0건</span></div>
+<input id="search" class="search" placeholder="이름이나 관계로 검색">
+<div class="filters"><select id="filter-side"><option value="전체">전체 측</option><option>신랑 측</option><option>신부 측</option></select><select id="filter-method"><option value="전체">전체 방식</option><option>계좌이체</option><option>현금</option></select></div>
+<div id="records" class="records"></div><div id="empty" class="empty">아직 입력한 축의금이 없어요.</div>
+</section>
+<section class="panel">
+<h2>자료 보관 및 내보내기</h2>
+<div class="tools"><button id="csv-btn">CSV 내보내기</button><button id="backup-btn">백업 파일 저장</button><label for="restore-file" class="buttonlike"><span style="display:block;text-align:center;border:1px solid var(--line);border-radius:12px;padding:12px;font-weight:650;font-size:13px">백업 파일 불러오기</span><input id="restore-file" type="file" accept=".json,application/json" class="hidden"></label><button id="clear-btn" class="danger">전체 내역 삭제</button></div>
+<p id="status" class="status">자동 저장은 이 기기의 이 브라우저 안에서만 됩니다. 기기를 바꾸거나 브라우저 데이터를 지우면 사라질 수 있으니, 백업 파일을 따로 보관하세요.</p>
+</section>
+<div class="foot">축의금 장부 · 개인 기록용</div>
+</main>
+<script>
+(()=> {
+'use strict';
+const $=id=>document.getElementById(id), KEY='wedding-gift-ledger-v3';
+let records=[],editing=null;
+const fmt=n=>new Intl.NumberFormat('ko-KR').format(Number(n)||0)+'원';
+const now=new Date(); $('date').value=[now.getFullYear(),String(now.getMonth()+1).padStart(2,'0'),String(now.getDate()).padStart(2,'0')].join('-');
+try{const raw=localStorage.getItem(KEY);records=raw?JSON.parse(raw):[];if(!Array.isArray(records))records=[];}catch(e){records=[];$('status').textContent='저장된 기록을 읽지 못했습니다. 백업 파일이 있다면 불러와 주세요.';}
+const escapeHTML=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function save(){try{localStorage.setItem(KEY,JSON.stringify(records));$('status').textContent='이 기기의 브라우저에 저장했습니다. 안전을 위해 백업 파일도 별도로 보관해 주세요.';}catch(e){$('status').textContent='자동 저장 공간을 사용할 수 없습니다. 즉시 백업 파일을 저장해 주세요.';}}
+function render(){
+ const sum=a=>a.reduce((s,r)=>s+Number(r.amount||0),0),g=records.filter(r=>r.side==='신랑 측'),b=records.filter(r=>r.side==='신부 측');
+ $('groom-total').textContent=fmt(sum(g));$('groom-count').textContent=g.length+'건';$('bride-total').textContent=fmt(sum(b));$('bride-count').textContent=b.length+'건';$('all-total').textContent=fmt(sum(records));
+ $('payment-total').textContent='계좌이체 '+fmt(sum(records.filter(r=>r.method==='계좌이체')))+' · 현금 '+fmt(sum(records.filter(r=>r.method==='현금')));
+ const q=$('search').value.trim().toLowerCase(),side=$('filter-side').value,method=$('filter-method').value;
+ const view=records.filter(r=>(side==='전체'||r.side===side)&&(method==='전체'||r.method===method)&&(!q||[r.name,r.relation,r.note,r.side].some(v=>String(v||'').toLowerCase().includes(q)))).sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+ $('record-count').textContent='총 '+records.length+'건';$('empty').style.display=view.length?'none':'block';
+ $('records').innerHTML=view.map(r=>`<article class="record"><div class="recordtop"><div style="min-width:0"><div class="tags"><span class="tag ${r.side==='신랑 측'?'g':'b'}">${escapeHTML(r.side)}</span><span class="tag">${escapeHTML(r.method)}</span></div><div class="recordname">${escapeHTML(r.name)}</div><div class="recordmeta">${escapeHTML(r.relation||'관계 미입력')} · ${escapeHTML(r.date||'날짜 미입력')}</div>${r.note?`<div class="note">${escapeHTML(r.note)}</div>`:''}</div><div class="recordamount">${fmt(r.amount)}</div></div><div class="recordbuttons"><button data-edit="${escapeHTML(r.id)}">수정</button><button class="delete" data-delete="${escapeHTML(r.id)}">삭제</button></div></article>`).join('');
+}
+function reset(){editing=null;$('gift-form').reset();$('date').value=[now.getFullYear(),String(now.getMonth()+1).padStart(2,'0'),String(now.getDate()).padStart(2,'0')].join('-');$('form-title').textContent='축의금 입력';$('save-btn').textContent='내역 저장';$('cancel-edit').classList.add('hidden');}
+$('gift-form').addEventListener('submit',e=>{e.preventDefault();const amount=Number($('amount').value),name=$('name').value.trim();if(!name||!Number.isFinite(amount)||amount<=0){alert('이름과 금액을 올바르게 입력해 주세요.');return;}const data={side:$('side').value,method:document.querySelector('input[name="method"]:checked').value,date:$('date').value,name,relation:$('relation').value.trim(),amount,note:$('note').value.trim()};if(editing)records=records.map(r=>r.id===editing?{...r,...data}:r);else records.push({id:Date.now()+'-'+Math.random().toString(36).slice(2),...data});save();reset();render();});
+$('cancel-edit').addEventListener('click',reset);
+document.querySelectorAll('[data-amount]').forEach(b=>b.addEventListener('click',()=>{$('amount').value=b.dataset.amount;}));
+$('records').addEventListener('click',e=>{const ed=e.target.closest('[data-edit]'),del=e.target.closest('[data-delete]');if(ed){const r=records.find(x=>x.id===ed.dataset.edit);if(!r)return;editing=r.id;$('side').value=r.side;document.querySelector(`input[name="method"][value="${r.method}"]`).checked=true;['date','name','relation','amount','note'].forEach(k=>$(k).value=r[k]??'');$('form-title').textContent='축의금 내역 수정';$('save-btn').textContent='수정 내용 저장';$('cancel-edit').classList.remove('hidden');$('gift-form').scrollIntoView({behavior:'smooth',block:'start'});}if(del){const r=records.find(x=>x.id===del.dataset.delete);if(r&&confirm(r.name+'님의 내역을 삭제할까요?')){records=records.filter(x=>x.id!==r.id);save();render();}}});
+['search','filter-side','filter-method'].forEach(id=>$(id).addEventListener(id==='search'?'input':'change',render));
+function download(name,data,type){const url=URL.createObjectURL(new Blob([data],{type})),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1200);}
+$('csv-btn').addEventListener('click',()=>{const rows=[['날짜','구분','받은 방식','이름','관계','금액','메모'],...records.map(r=>[r.date,r.side,r.method,r.name,r.relation,r.amount,r.note])];download('축의금_장부.csv','\uFEFF'+rows.map(row=>row.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n'),'text/csv;charset=utf-8');});
+$('backup-btn').addEventListener('click',()=>download('축의금_백업_'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify(records,null,2),'application/json'));
+$('restore-file').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{const arr=JSON.parse(await f.text());if(!Array.isArray(arr)||!arr.every(r=>r&&['신랑 측','신부 측'].includes(r.side)&&r.name&&Number(r.amount)>0))throw Error();if(confirm('현재 내역을 백업 파일 내용으로 바꿀까요?')){records=arr.map((r,i)=>({...r,id:String(r.id||Date.now()+'-'+i)}));save();render();reset();alert('백업을 불러왔습니다.');}}catch(err){alert('올바른 축의금 JSON 백업 파일이 아닙니다.');}e.target.value='';});
+$('clear-btn').addEventListener('click',()=>{if(confirm('모든 내역을 삭제할까요? 되돌릴 수 없습니다.')){records=[];save();render();reset();}});
+if('serviceWorker' in navigator && location.protocol.startsWith('http')){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));}
+render();
+})();
+</script>
+</body></html>
